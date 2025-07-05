@@ -2,33 +2,36 @@ const startBtn = document.getElementById("startBtn");
  const userInput = document.getElementById("userInput")
  const counter = document.getElementById("counter");
 
- startBtn.addEventListener("click", () => {
-   let count = Number(userInput.value)
-   counter.textContent = count
+ let timerId = null;
 
-   counter.style.position = "absolute";
- counter.style.top = "50%";
- counter.style.left = "50%";
- counter.style.transform = "translate(-50%, -50%)";
- counter.style.fontSize = "50px";
- counter.style.color = "black";
- counter.style.zIndex = "1";
- counter.style.fontWeight = "bold";
- counter.style.textAlign = "center";
+function startCountdown() {
+  const raw = userInput.value.trim();
+  const countStart = Number(raw);
+
+  if (!raw || isNaN(countStart) || countStart <= 0) {
+    alert("Invalid input. Please enter a positive number.");
+    return;
+  }
+  if (timerId) clearInterval(timerId);
+
+  let count = countStart;
+  counter.textContent = count;
+
+timerId = setInterval(() => {
+  count--;
+counter.textContent = count;
+
+ counter.classList.add('animate');
+setTimeout(() => counter.classList.remove('animate'), 150);
+
+if (count === 0) {
+  clearInterval(timerId);
+  alert("Times up!");
+}
+}, 1000);
+
+userInput.value = "";
+  }
+ startBtn.addEventListener("click", startCountdown);
 
 
-
-   const timer = setInterval(() => {
-     count--;
-     if(count === 0) {
-       clearInterval(timer)
-     alert("times up")
-      
-     }
-     counter.textContent = count; 
-    
-   }, 1000)
-
-   userInput = document.getElementById("userInput").value = ""
-
- })
